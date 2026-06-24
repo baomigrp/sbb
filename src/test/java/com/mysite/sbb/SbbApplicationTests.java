@@ -6,7 +6,9 @@ import java.util.Optional;
 import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.answer.AnswerRepository;
 import com.mysite.sbb.question.Question;
+import com.mysite.sbb.question.QuestionForm;
 import com.mysite.sbb.question.QuestionRepository;
+import com.mysite.sbb.question.QuestionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,9 +25,23 @@ class SbbApplicationTests {
     private QuestionRepository questionRepository;
     @Autowired
     private AnswerRepository answerRepository;
+    @Autowired
+    private QuestionService questionService;
+
+    @Test
+    void testJpa(){
+        for (int i = 0; i < 300; i++) {
+            String subject = String.format("테스트 데이터입니다.:[%03d]", i);
+            String content = "내용무";
+            QuestionForm questionForm = new QuestionForm();
+            questionForm.setContent(content);
+            questionForm.setSubject(subject);
+            this.questionService.create(questionForm, null);
+        }
+    }
 
     //질문 데이터를 통해 답변 데이터 찾기
-    @Transactional
+/*    @Transactional
     @Test
     void testJpa() {
         Optional<Question> oq = this.questionRepository.findById(4);
@@ -36,7 +52,7 @@ class SbbApplicationTests {
 
         assertEquals(1, answerList.size());
         assertEquals("네 자동으로 생성됩니다.", answerList.get(0).getContent());
-    }
+    }*/
 
 /*
     //질문 데이터 삭제하기
